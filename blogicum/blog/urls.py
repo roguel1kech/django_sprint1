@@ -1,8 +1,12 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from . import views
+
+
+app_name = 'blog'
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include(('blog.urls', 'blog'), namespace='blog')),
-    path('pages/', include(('pages.urls', 'pages'), namespace='pages')),
+    path('', views.index, name='index'),
+    path('posts/<int:id>/', views.post_detail, name='post_detail'),
+    path('category/<slug:category_slug>/', views.category_posts, name='category_posts'),
 ]
