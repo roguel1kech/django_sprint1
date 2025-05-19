@@ -1,7 +1,8 @@
 from django.shortcuts import render
+
 from django.http import Http404
 
-
+# Temporary list of posts
 posts = [
     {
         'id': 0,
@@ -45,28 +46,19 @@ posts = [
     },
 ]
 
-
 def index(request):
-    context = {
-        'posts': posts,
-    }
-    return render(request, 'blog/index.html', context)
-
+    # Тесты требуют инвертированный порядок
+    return render(request, 'blog/index.html', {'posts': posts[::-1]})
 
 def post_detail(request, id):
     post = next((p for p in posts if p['id'] == id), None)
     if post is None:
-        raise Http404("Пост не найден")
-    context = {
-        'post': post,
-    }
-    return render(request, 'blog/detail.html', context)
-
+        raise Http404('Пост не найден')
+    return render(request, 'blog/detail.html', {'post': post})
 
 def category_posts(request, category_slug):
-    context = {
-        # Для соответствия тесту — на странице категории должен отображаться
-        # текст "-<slug>"
+    filtered = [p for p in posts if p['category'] == category_slug]
+    return render(request, 'blog/category.html', {
+        'posts': filtered,
         'category_slug': category_slug,
-    }
-    return render(request, 'blog/category.html', context)
+    })
