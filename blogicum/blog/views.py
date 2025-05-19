@@ -46,15 +46,18 @@ posts = [
     },
 ]
 
+
 def index(request):
     # Тесты требуют инвертированный порядок
     return render(request, 'blog/index.html', {'posts': posts[::-1]})
+
 
 def post_detail(request, id):
     post = next((p for p in posts if p['id'] == id), None)
     if post is None:
         raise Http404('Пост не найден')
     return render(request, 'blog/detail.html', {'post': post})
+
 
 def category_posts(request, category_slug):
     filtered = [p for p in posts if p['category'] == category_slug]
